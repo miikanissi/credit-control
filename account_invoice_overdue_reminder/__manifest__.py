@@ -4,7 +4,7 @@
 
 {
     "name": "Overdue Invoice Reminder",
-    "version": "19.0.1.0.0",
+    "version": "20.0.1.0.0",
     "category": "Accounting",
     "license": "AGPL-3",
     "summary": "Simple mail/letter/phone overdue customer invoice reminder ",
@@ -13,8 +13,7 @@
     "website": "https://github.com/OCA/credit-control",
     "depends": ["account"],
     "data": [
-        "security/ir.model.access.csv",
-        "security/ir_rule.xml",
+        "security/ir.access.csv",
         "wizard/overdue_reminder_wizard_view.xml",
         "views/res_partner.xml",
         "views/report.xml",

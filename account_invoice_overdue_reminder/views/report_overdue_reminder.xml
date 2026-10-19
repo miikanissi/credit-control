@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <template id="account_invoice_overdue_reminder.report_overdue_reminder_document">
-        <t t-call="web.external_layout">
-            <t t-set="o" t-value="o.with_context(lang=lang)" />
-            <t t-set="address">
-                <address
-                    t-field="o.partner_id"
-                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
-                />
-                <div t-if="o.partner_id.vat" id="partner_vat"><t
-                    t-out="o.company_id.account_fiscal_country_id.vat_label or 'Tax ID'"
-                />: <span t-field="o.partner_id.vat" /></div>
-            </t>
+        <t t-set="o" t-value="o.with_context(lang=lang)" />
+        <t t-set="address">
+            <address
+                t-field="o.partner_id"
+                t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'
+            />
+            <div t-if="o.partner_id.vat" id="partner_vat"><t
+                t-out="o.company_id.account_fiscal_country_id.vat_label or 'Tax ID'"
+            />: <span t-field="o.partner_id.vat" /></div>
+        </t>
+        <t t-call="web.external_layout" address="address">
             <div class="page">
                 <p>Date: <span t-field="o.date" /></p>
                 <p>Subject: Overdue invoice reminder n°<span t-field="o.counter" /></p>

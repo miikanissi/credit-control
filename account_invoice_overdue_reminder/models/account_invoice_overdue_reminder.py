@@ -14,7 +14,7 @@ class AccountInvoiceOverdueReminder(models.Model):
     # For the link to invoice: why a M2O and not a M2M ?
     # Because of the "counter" field: a single reminder action for a customer,
     # the "counter" may not be the same for each invoice
-    invoice_id = fields.Many2one("account.move", string="Invoice", ondelete="cascade")
+    invoice_id = fields.Many2one("account.move", ondelete="cascade")
     action_id = fields.Many2one(
         "overdue.reminder.action", string="Overdue Reminder Action", ondelete="cascade"
     )

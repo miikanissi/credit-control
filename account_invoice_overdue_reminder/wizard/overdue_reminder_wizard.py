@@ -2,7 +2,6 @@
 # @author: Alexis de Lattre <alexis.delattre@akretion.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-import base64
 import logging
 from collections import defaultdict
 
@@ -211,11 +210,9 @@ class OverdueReminderStart(models.TransientModel):
         assert invs
         # Check min interval
         if any(
-            [
-                inv.overdue_reminder_last_date > min_interval_date
-                for inv in invs
-                if inv.overdue_reminder_last_date
-            ]
+            inv.overdue_reminder_last_date > min_interval_date
+            for inv in invs
+            if inv.overdue_reminder_last_date
         ):
             logger.info(
                 "Skipping customer %s that has at least one invoice "
@@ -290,7 +287,7 @@ class OverdueReminderStartPayment(models.TransientModel):
     _description = "Status of payments"
 
     wizard_id = fields.Many2one("overdue.reminder.start", ondelete="cascade")
-    journal_id = fields.Many2one("account.journal", string="Journal", readonly=True)
+    journal_id = fields.Many2one("account.journal", readonly=True)
     last_entry_date = fields.Date(string="Last Entry", readonly=True)
     last_entry_create_date = fields.Datetime(
         string="Last Entry Created on", readonly=True
@@ -546,7 +543,7 @@ class OverdueReminderStep(models.TransientModel):
             attach = iao.create(
                 {
                     "name": filename,
-                    "datas": base64.b64encode(report_bin),
+                    "raw": report_bin,
                     "res_model": "mail.message",
                     "res_id": mail.mail_message_id.id,
                 }
@@ -661,7 +658,7 @@ class OverdueReminderStep(models.TransientModel):
     def print_letter(self):
         self.check_warnings()
         self.letter_printed = True
-        action = action = (
+        action = (
             self.env.ref(MOD + ".overdue_reminder_step_report")
             .with_context(discard_logo_check=True)
             .report_action(self)

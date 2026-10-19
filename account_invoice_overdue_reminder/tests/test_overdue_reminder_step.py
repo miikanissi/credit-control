@@ -12,6 +12,8 @@ from odoo.addons.base.tests.common import BaseCommon
 
 
 class TestOverdueReminderStep(BaseCommon):
+    _test_user_groups = ("account.group_account_invoice",)
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -100,6 +102,18 @@ class TestOverdueReminderStep(BaseCommon):
             }
             vals = self.step.generate_mail_vals()
             self.assertIn("mail_id", vals)
+        # The invoice PDF is attached with its content, not as an empty file
+        mail = self.env["mail.mail"].sudo().browse(vals["mail_id"])
+        self.assertEqual(len(mail.attachment_ids), 1)
+        self.assertTrue(mail.attachment_ids.raw)
+
+    def test_letter_address(self):
+        html = self.env["ir.actions.report"]._render_qweb_html(
+            "account_invoice_overdue_reminder.overdue_reminder_step_report",
+            self.step.ids,
+        )[0]
+        self.assertIn(b'name="address"', html)
+        self.assertIn(self.partner.name.encode(), html)
 
     def test_validate_phone(self):
         self.step.reminder_type = "phone"
@@ -123,7 +137,7 @@ class TestOverdueReminderStep(BaseCommon):
             self.step._prepare_mail_activity()
 
     def test_check_warnings_raises(self):
-        self.step.company_id = self.env["res.company"].create({"name": "Other"})
+        self.step.company_id = self.env["res.company"].sudo().create({"name": "Other"})
         with self.assertRaises(UserError):
             self.step.check_warnings()
         self.step.company_id = self.company
@@ -219,7 +233,10 @@ class TestOverdueReminderStep(BaseCommon):
             )
             self.assertTrue(actions.mail_id)
             self.assertEqual(
-                self.env["mail.mail"].search_count([("subject", "=", "Subject")]), 1
+                self.env["mail.mail"]
+                .sudo()
+                .search_count([("subject", "=", "Subject")]),
+                1,
             )
             self.assertEqual(actions.mail_id.subject, "Subject")
             self.assertIn("Body", actions.mail_id.body_html)

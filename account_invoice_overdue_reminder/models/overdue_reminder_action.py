@@ -44,7 +44,7 @@ class OverdueReminderAction(models.Model):
     mail_id = fields.Many2one("mail.mail", string="Reminder E-mail", readonly=True)
     mail_state = fields.Selection(related="mail_id.state", string="E-mail Status")
     mail_cc = fields.Char(related="mail_id.email_cc", readonly=True)
-    company_id = fields.Many2one("res.company", string="Company", readonly=True)
+    company_id = fields.Many2one("res.company", readonly=True)
     reminder_count = fields.Integer(
         compute="_compute_invoice_count", store=True, string="Number of invoices"
     )

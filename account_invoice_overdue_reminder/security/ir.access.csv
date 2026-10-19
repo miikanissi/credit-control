@@ -1,0 +1,15 @@
+id,name,model_id,group_id/id,operation,domain
+access_overdue_reminder_result_read,Read access on overdue.reminder.result,overdue.reminder.result,account.group_account_invoice,r,
+access_overdue_reminder_result_audit,Read access on overdue.reminder.result to auditor,overdue.reminder.result,account.group_account_readonly,r,
+access_overdue_reminder_result_full,Full access on overdue.reminder.result,overdue.reminder.result,account.group_account_manager,crud,
+access_overdue_reminder_action_user,Read/create/write on reminder actions,overdue.reminder.action,account.group_account_invoice,cru,
+access_overdue_reminder_action_audit,Read access on reminder actions,overdue.reminder.action,account.group_account_readonly,r,
+access_overdue_reminder_action_manager,Full access on reminder actions,overdue.reminder.action,account.group_account_manager,crud,
+access_account_invoice_overdue_reminder_user,Read/create/write on reminder counters,account.invoice.overdue.reminder,account.group_account_invoice,cru,
+access_account_invoice_overdue_reminder_audit,Read access on reminder counters to auditor,account.invoice.overdue.reminder,account.group_account_readonly,r,
+access_account_invoice_overdue_reminder_manager,Full access on reminder counters,account.invoice.overdue.reminder,account.group_account_manager,crud,
+account_invoice_overdue_reminder_rule,Overdue Invoice Reminder multi-company,account.invoice.overdue.reminder,,crud,"['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]"
+access_overdue_reminder_start,Full access on overdue.reminder.start (wizard),overdue.reminder.start,account.group_account_invoice,crud,
+access_overdue_reminder_start_payment,Full access on overdue.reminder.start.payment (wizard),overdue.reminder.start.payment,account.group_account_invoice,crud,
+access_overdue_reminder_step,Full access on overdue.reminder.step (wizard),overdue.reminder.step,account.group_account_invoice,crud,
+access_overdue_reminder_mass_update,Full access on overdue.reminder.mass.update (wizard),overdue.reminder.mass.update,account.group_account_invoice,crud,
