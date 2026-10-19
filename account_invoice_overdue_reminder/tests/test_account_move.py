@@ -14,6 +14,8 @@ class TestAccountMove(TransactionCase):
             {
                 "move_type": "out_invoice",
                 "partner_id": cls.partner.id,
+                # no payment term, so posting keeps this due date
+                "invoice_payment_term_id": False,
                 "invoice_date_due": fields.Date.subtract(fields.Date.today(), days=5),
                 "invoice_line_ids": [
                     Command.create(
@@ -33,6 +35,8 @@ class TestAccountMove(TransactionCase):
             {
                 "move_type": "out_invoice",
                 "partner_id": cls.partner.id,
+                # no payment term, so posting keeps this due date
+                "invoice_payment_term_id": False,
                 "invoice_date_due": fields.Date.add(fields.Date.today(), days=5),
                 "invoice_line_ids": [
                     Command.create(
