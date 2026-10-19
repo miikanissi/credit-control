@@ -729,4 +729,3 @@ class OverdueRemindMassUpdate(models.TransientModel):
             if not self.reminder_type:
                 raise UserError(self.env._("You must select the new reminder type."))
             actions.reminder_type = self.reminder_type
-        return

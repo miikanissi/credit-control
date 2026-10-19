@@ -86,18 +86,20 @@ class TestOverdueReminderStep(BaseCommon):
         self.step.mail_subject = "Test Subject"
         self.step.mail_body = "<p>Test Body</p>"
         self.assertTrue(self.step.validate_mail())
-        with patch.object(
-            type(self.step),
-            "_get_overdue_invoice_reminder_template",
-            return_value="module.template_xmlid",
+        with (
+            patch.object(
+                type(self.step),
+                "_get_overdue_invoice_reminder_template",
+                return_value="module.template_xmlid",
+            ),
+            patch.object(self.env, "ref") as mock_ref,
         ):
-            with patch.object(self.env, "ref") as mock_ref:
-                mock_template = mock_ref.return_value
-                mock_template._generate_template.return_value = {
-                    self.step.id: {"email_from": "from@test.com"}
-                }
-                vals = self.step.generate_mail_vals()
-                self.assertIn("mail_id", vals)
+            mock_template = mock_ref.return_value
+            mock_template._generate_template.return_value = {
+                self.step.id: {"email_from": "from@test.com"}
+            }
+            vals = self.step.generate_mail_vals()
+            self.assertIn("mail_id", vals)
 
     def test_validate_phone(self):
         self.step.reminder_type = "phone"
