@@ -115,6 +115,16 @@ class TestOverdueReminderStep(BaseCommon):
         self.assertIn(b'name="address"', html)
         self.assertIn(self.partner.name.encode(), html)
 
+    def test_generate_mail_vals_recipients(self):
+        self.step._compute_counter_and_mail()
+        vals = self.step.generate_mail_vals()
+        mail = self.env["mail.mail"].sudo().browse(vals["mail_id"])
+        self.assertEqual(mail.recipient_ids, self.partner)
+        self.assertEqual(
+            [out["email_to"] for out in mail._prepare_outgoing_list()],
+            [[self.partner.email_formatted]],
+        )
+
     def test_validate_phone(self):
         self.step.reminder_type = "phone"
         vals = self.step.validate_phone()

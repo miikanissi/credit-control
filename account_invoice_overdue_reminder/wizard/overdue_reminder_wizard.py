@@ -587,6 +587,14 @@ class OverdueReminderStep(models.TransientModel):
         )
         mvals.pop("attachment_ids", None)
         mvals.pop("attachments", None)
+        # The template's default recipients come back as partner_ids, which a
+        # mail.mail doesn't send to: map them like mail.template.send_mail()
+        mvals["recipient_ids"] = [
+            Command.link(pid) for pid in mvals.pop("partner_ids", [])
+        ]
+        mvals["recipient_cc_ids"] = [
+            Command.link(pid) for pid in mvals.pop("partner_cc_ids", [])
+        ]
         mail = self.env["mail.mail"].sudo().create(mvals)
         if self.company_id.overdue_reminder_attach_invoice:
             attachment_ids = self._get_attachment_ids(mail)
